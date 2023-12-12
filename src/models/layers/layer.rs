@@ -10,4 +10,5 @@ pub trait Layer {
     fn get_activation(&self) -> &Activation;
     fn get_input_size(&self) -> usize;
     fn get_output_size(&self) -> usize;
+    fn print_params(&self);
 }

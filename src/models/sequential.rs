@@ -34,6 +34,10 @@ impl Sequential {
         self.metrics = metrics;
     }
 
+    pub fn get_layers(&self) -> &Vec<Box<dyn Layer>> {
+        &self.layers
+    }
+
     pub fn add(&mut self, layer: impl Layer + 'static) {
         self.layers.push(Box::new(layer));
     }
@@ -59,7 +63,7 @@ impl Sequential {
             "training data and labels must have the same number of rows"
         );
 
-        let mut input = &x;
+        let input = &x;
 
         for epoch in 0..epochs {
             for (data, labels) in input.iter_batch(batch_size).zip(y.iter_batch(20)) {
@@ -69,7 +73,11 @@ impl Sequential {
             }
 
             if verbose && epoch % 100 == 0 {
-                println!("Epoch: {}  -  Loss : {}", epoch, self.evaluate(x.clone(), y.clone()));
+                println!(
+                    "Epoch: {}  -  Loss : {}",
+                    epoch,
+                    self.evaluate(x.clone(), y.clone())
+                );
             }
         }
     }
@@ -100,7 +108,6 @@ impl Sequential {
         }
 
         self.loss.forward(&input, &y_test)
-
     }
 
     pub fn summary(&self) {
@@ -127,6 +134,12 @@ impl Sequential {
             );
             println!("Activation: {:?}", layer.get_activation());
             println!("  ");
+        }
+    }
+
+    pub fn print_params(&self) {
+        for layer in self.layers.iter() {
+            layer.print_params()
         }
     }
 }

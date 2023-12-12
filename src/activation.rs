@@ -1,6 +1,7 @@
+use std::convert::identity;
 use crate::datasets::vec_dataset::VecDataset;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Activation {
     Identity,
     ReLU,
@@ -15,7 +16,7 @@ impl Activation {
                 .as_ref()
                 .iter()
                 .map(|&x| match self {
-                    Activation::Identity => x,
+                    Activation::Identity => identity(x),
                     Activation::ReLU => relu(x),
                     Activation::Sigmoid => sigmoid(x),
                     Activation::Tanh => tanh(x),
